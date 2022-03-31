@@ -8,11 +8,8 @@ import torchvision.transforms as transforms
 import PIL.Image
 from trt_pose.draw_objects import DrawObjects
 from trt_pose.parse_objects import ParseObjects
-#from jetcam.csi_camera import CSICamera
+from jetcam.csi_camera import CSICamera
 #from jetcam.utils import bgr8_to_jpeg
-import cv2
-import torchvision.transforms as transforms
-import PIL.Image
 
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
@@ -31,9 +28,6 @@ torch.save(model_trt.state_dict(), OPTIMIZED_MODEL)
 
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
-import cv2
-import torchvision.transforms as transforms
-import PIL.Image
 
 mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
 std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
@@ -50,3 +44,15 @@ def preprocess(image):
 
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
+
+def execute(change):
+    image = change['new']
+    data = preprocess(image)
+    cmap, paf = model_trt(data)
+    cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
+    counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
+    draw_objects(image, counts, objects, peaks)
+    image_w.value = bgr8_to_jpeg(image[:, ::-1, :])
+
+execute({'new': camera.value})
+camera.observe(execute, names='value')
