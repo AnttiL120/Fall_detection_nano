@@ -2,7 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,visualstudiocode
 
 #Resnet files#
-resnet18*
+resnet18_baseline_att_224x224_A_epoch_249_trt.pth
+resnet18_baseline_att_224x224_A_epoch_249.pth
 
 ### Linux ###
 *~
