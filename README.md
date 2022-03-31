@@ -1,6 +1,5 @@
 # Fall_detection_nano
 Fall detection with Jetson nano and rasberry camera
-<<<<<<< HEAD
 
 
 ## Table of Contents
@@ -43,5 +42,3 @@ Antti Lehtosalo @mediator246
 
 ### License
 Copyright [2022] [Antti Lehtosalo]
-=======
->>>>>>> 11a2fb504d3aec28c16c95a9bca93ee3e60ab54c
