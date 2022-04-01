@@ -3,6 +3,7 @@ import trt_pose.coco
 import torch
 import trt_pose.models
 import torch2trt
+import time
 
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
@@ -27,3 +28,12 @@ model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_siz
 OPTIMIZED_MODEL = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 
 torch.save(model_trt.state_dict(), OPTIMIZED_MODEL)
+
+t0 = time.time()
+torch.cuda.current_stream().synchronize()
+for i in range(50):
+    y = model_trt(data)
+torch.cuda.current_stream().synchronize()
+t1 = time.time()
+
+print(50.0 / (t1 - t0))

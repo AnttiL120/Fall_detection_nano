@@ -1,7 +1,7 @@
 import json
 import trt_pose.coco
 import torch
-import torch2trt
+#import torch2trt
 from torch2trt import TRTModule
 import cv2
 import torchvision.transforms as transforms
@@ -9,7 +9,7 @@ import PIL.Image
 from trt_pose.draw_objects import DrawObjects
 from trt_pose.parse_objects import ParseObjects
 from jetcam.csi_camera import CSICamera
-#from jetcam.utils import bgr8_to_jpeg
+from jetcam.utils import bgr8_to_jpeg
 
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
@@ -44,6 +44,8 @@ def preprocess(image):
 
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
+camera = CSICamera(width=WIDTH, height=HEIGHT, capture_fps=30)
+
 
 def execute(change):
     image = change['new']
@@ -52,7 +54,9 @@ def execute(change):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     draw_objects(image, counts, objects, peaks)
-    image_w.value = bgr8_to_jpeg(image[:, ::-1, :])
+    processed_image = bgr8_to_jpeg(image[:, ::-1, :])
+    
+    return processed_image
 
 execute({'new': camera.value})
 camera.observe(execute, names='value')
