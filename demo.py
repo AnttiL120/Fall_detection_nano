@@ -1,7 +1,6 @@
 import json
 import trt_pose.coco
 import torch
-#import torch2trt
 from torch2trt import TRTModule
 import cv2
 import torchvision.transforms as transforms
@@ -24,11 +23,7 @@ OPTIMIZED_MODEL = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(OPTIMIZED_MODEL))
 
-torch.save(model_trt.state_dict(), OPTIMIZED_MODEL)
-
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
-
-
 mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
 std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
 device = torch.device('cuda')
@@ -46,7 +41,6 @@ parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 camera = CSICamera(width=WIDTH, height=HEIGHT, capture_fps=30)
 
-
 def execute(change):
     image = change['new']
     data = preprocess(image)
@@ -55,7 +49,7 @@ def execute(change):
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
     draw_objects(image, counts, objects, peaks)
     processed_image = bgr8_to_jpeg(image[:, ::-1, :])
-    
+
     return processed_image
 
 execute({'new': camera.value})
