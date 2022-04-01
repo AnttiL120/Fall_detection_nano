@@ -1,3 +1,6 @@
+#First run init.py with a command python3 init.py
+#That one saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
+
 import json
 import trt_pose.coco
 import torch
@@ -9,13 +12,16 @@ from draw import DrawObjects
 from trt_pose.parse_objects import ParseObjects
 from jetcam.csi_camera import CSICamera
 from jetcam.utils import bgr8_to_jpeg
+import numpy as np
+from capture_video import capture_video
+
 
 #Topology for human pose
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
-#Resolution on the model was 224x224 so I am using the same
+#Resolution on the model was 224x224 so using the same
 WIDTH = 224
 HEIGHT = 224
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
@@ -25,13 +31,18 @@ OPTIMIZED_MODEL = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(OPTIMIZED_MODEL))
 
+#Setting torch
 mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
 std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
 device = torch.device('cuda')
 
+#parse and draw functions
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
+
+#Setting up the camera. Check from jetcam librarby for USB camera 
 camera = CSICamera(width=WIDTH, height=HEIGHT, capture_fps=30)
+capture = capture_video('test.avi')
 
 #Images precrocess function
 def preprocess(image):
@@ -44,57 +55,6 @@ def preprocess(image):
     return image[None, ...]
 
 #Function to check necks and ankle positions on the image. This returns then if the person might be falling or has fallen
-def check_pose(objects, normalized_peaks):
-
-    i = 18
-    neck = 6
-    neck_posx = []
-    neck_posy = []
-    left_ankle = 7
-    left_ankle_posx = []
-    left_ankle_posy = []
-    right_ankle= 12
-    right_ankle_posx = []
-    right_ankle_posy = []
-    height = 224
-    width = 224
-    fall_value = 20
-    pose_position = 0
-
-    obj = objects[0][i]
-    C = obj.shape[0]
-    for j in range(C):
-        k = int(obj[j])
-        if k >= 0:
-            peak = normalized_peaks[0][j][k]
-            x = round(float(peak[1]) * width)
-            y = round(float(peak[0]) * height)
-            if j == neck:
-                neck_posx = x
-                neck_posy = y
-            if j == left_ankle:
-                left_ankle_posx = x
-                left_ankle_posy = y
-            if j == right_ankle:
-                right_ankle_posx = x
-                right_ankle_posy = y
-        else:
-            pose_position = 0
-
-    if neck_posy - left_ankle_posy < fall_value:
-        pose_position = -1
-    
-    elif neck_posy - right_ankle_posy < fall_value:
-        pose_position = -1
-
-    elif neck_posx - left_ankle_posx < fall_value or neck_posx - right_ankle_posx < fall_value:
-        pose_position = 2
-
-    else:
-        pose_position = 1
-
-    print(pose_position)
-    return pose_position
 
 #Execute function
 def execute(change):
@@ -103,12 +63,17 @@ def execute(change):
     cmap, paf = model_trt(data)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
-    current_pose = check_pose(objects, peaks)
-    draw_objects(image, counts, objects, peaks, current_pose)
-    processed_image = bgr8_to_jpeg(image[:, ::-1, :])
+    draw_objects(image, counts, objects, peaks)
+    image = bgr8_to_jpeg(image[:, ::-1, :])
+    capture(image)
 
-    return processed_image
+#Start executing 400 frames
+limit = 50
+for i in range(limit):
+    execute({'new': camera.value})
+    camera.observe(execute, names='value')
 
-#Start executing when a new frame comes from the camera
-execute({'new': camera.value})
-camera.observe(execute, names='value')
+    print('frame:', i)
+
+camera.unobserve_all()
+camera.running = False

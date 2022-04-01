@@ -5,6 +5,8 @@
 resnet18_baseline_att_224x224_A_epoch_249_trt.pth
 resnet18_baseline_att_224x224_A_epoch_249.pth
 
+__pycache__
+
 ### Linux ###
 *~
 

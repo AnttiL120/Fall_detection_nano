@@ -40,6 +40,8 @@ To check that modules are working run test/check.py
 At the moment still a work in progress. First run init.py then human_pos.py.
 When you have ran those then run shutdown.py.
 
+check for rtp_stream:  
+video-viewer --bitrate=1000000 csi://0 rtp://<remote-ip>:1234
 ### Maintainer(s)
 Antti Lehtosalo @AnttiL120
 

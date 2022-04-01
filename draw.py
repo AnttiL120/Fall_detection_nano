@@ -5,20 +5,12 @@ class DrawObjects(object):
     def __init__(self, topology):
         self.topology = topology
         
-    def __call__(self, image, object_counts, objects, normalized_peaks, current_pose):
+    def __call__(self, image, object_counts, objects, normalized_peaks):
         topology = self.topology
         height = image.shape[0]
         width = image.shape[1]
-        
-        if current_pose == 2:
-            color = (0, 255, 0)
-        elif current_pose == 1:
-            color = (255, 255, 0)
-        elif current_pose == -1:
-            color = (0, 0, 255)
-        else:
-            color = (255, 255, 255)
-        
+        color = (0, 255, 0)
+
         K = topology.shape[0]
         count = int(object_counts[0])
         K = topology.shape[0]
