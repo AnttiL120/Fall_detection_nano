@@ -26,10 +26,10 @@ Fall detection with Jetson nano and rasberry camera. Uses TRT_pose recognition.
 first follow the installation of trt_pose:  
 https://github.com/NVIDIA-AI-IOT/trt_pose
 
-I recommend
 
 ### Usage
-
+To check that modules are working run test/check.py
+At the moment still a work in progress. First run init.py then human_pos.py.
 
 ### Maintainer(s)
 

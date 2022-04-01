@@ -91,6 +91,7 @@ def check_pose(objects, normalized_peaks):
     else:
         pose_position = 1
 
+    print(pose_position)
     return pose_position
 
 def execute(change):
