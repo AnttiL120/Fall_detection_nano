@@ -2,11 +2,13 @@ import cv2
 
 class DrawObjects(object):
     
-    def __init__(self, topology):
+    def __init__(self, topology, keypoints):
         self.topology = topology
+        self.keypoints = keypoints
         
     def __call__(self, image, object_counts, objects, normalized_peaks):
         topology = self.topology
+        keypoints = self.keypoints
         height = image.shape[0]
         width = image.shape[1]
         color = (0, 255, 0)
@@ -24,7 +26,7 @@ class DrawObjects(object):
                     x = round(float(peak[1]) * width)
                     y = round(float(peak[0]) * height)
                     cv2.circle(image, (x, y), 3, color, 2)
-                    cv2.putText(image, topology.keypoints[j])
+                    cv2.putText(image, keypoints[j], (x + 20, y), cv2.FONT_HERSHEY_PLAIN, 1, color, 1, cv2.LINE_AA)
 
             for k in range(K):
                 c_a = topology[k][2]

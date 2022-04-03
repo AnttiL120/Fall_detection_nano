@@ -6,8 +6,7 @@ gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camer
 """
 color = (0, 255, 0)
 
-def pos(image):
-    cv2.rectangle(image, (0, 0), (224, 224), color, 2)
+
 
 def gstreamer_pipeline(
     sensor_id=0,
