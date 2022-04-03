@@ -10,7 +10,7 @@ class DrawObjects(object):
         height = image.shape[0]
         width = image.shape[1]
         color = (0, 255, 0)
-
+        cv2.rectangle(image, (0, 0), (224, 224), color, 2)
         K = topology.shape[0]
         count = int(object_counts[0])
         K = topology.shape[0]
@@ -24,6 +24,7 @@ class DrawObjects(object):
                     x = round(float(peak[1]) * width)
                     y = round(float(peak[0]) * height)
                     cv2.circle(image, (x, y), 3, color, 2)
+                    cv2.putText(image, topology.keypoints[j])
 
             for k in range(K):
                 c_a = topology[k][2]

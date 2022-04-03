@@ -1,5 +1,5 @@
 #First run init.py with a command python3 init.py
-#That one saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
+#Init saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
 
 import json
 import trt_pose.coco
@@ -13,7 +13,6 @@ from trt_pose.parse_objects import ParseObjects
 from jetcam.csi_camera import CSICamera
 from jetcam.utils import bgr8_to_jpeg
 import numpy as np
-from capture_video import capture_video
 
 
 #Topology for human pose
@@ -42,7 +41,7 @@ draw_objects = DrawObjects(topology)
 
 #Setting up the camera. Check from jetcam librarby for USB camera 
 camera = CSICamera(width=WIDTH, height=HEIGHT, capture_fps=30)
-capture = capture_video('test.avi')
+camera.running = True
 
 #Images precrocess function
 def preprocess(image):
@@ -64,16 +63,20 @@ def execute(change):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
     draw_objects(image, counts, objects, peaks)
-    image = bgr8_to_jpeg(image[:, ::-1, :])
-    capture(image)
+    processed = bgr8_to_jpeg(image[:, ::-1, :])
+    return processed
 
-#Start executing 400 frames
-limit = 50
-for i in range(limit):
-    execute({'new': camera.value})
-    camera.observe(execute, names='value')
 
-    print('frame:', i)
+#Start executing
+cap = camera.value
+
+while True:
+    frame = execute (cap)
+    cv2.imshow('human pose',frame)
+
+    if cv2.waitKey(1) == 27:
+        break
+
 
 camera.unobserve_all()
 camera.running = False

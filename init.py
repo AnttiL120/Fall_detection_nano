@@ -36,4 +36,5 @@ for i in range(50):
 torch.cuda.current_stream().synchronize()
 t1 = time.time()
 
-print(50.0 / (t1 - t0))
+print('Benchmark FPS of the model:',50.0 / (t1 - t0))
+print('Model was optimised successfully')
