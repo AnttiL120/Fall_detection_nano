@@ -8,7 +8,7 @@ class DrawObjects(object):
         self.topology = topology
         self.nose_value = 0
         self.left_hip_value = 12
-        self.right_hip_value = 13
+        self.right_hip_value = 11
         self.left_ankle_value = 15
         self.right_ankle_value = 16
         self.peak_nose_x = 10
@@ -71,7 +71,8 @@ class DrawObjects(object):
 
                     cv2.circle(image, (x, y), 3, color, 2)
                     cv2.putText(image, standing,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
-                    cv2.putText(image, "nose:{}".format(peak_nose_x),(100, peak_nose_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "ankle_check:{}".format(ankle_check),(150, ankle_check), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "hip_check:{}".format(hip_check),(50, hip_check), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                     cv2.putText(image, "l.ankle:{}".format(peak_left_ankle_x),(180, peak_left_ankle_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
                     cv2.putText(image, "r.ankle:{}".format(peak_right_ankle_x),(0, peak_right_ankle_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
                     cv2.putText(image, "r.hip:{}".format(peak_right_hip_x),(180, peak_right_hip_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
