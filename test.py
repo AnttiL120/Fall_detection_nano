@@ -17,7 +17,7 @@ with open('human_pose.json', 'r') as f:
 
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
-#Resolution on the model was 224x224 so using the same
+#Resolution on the model was 224x224 so using the same resolution
 WIDTH = 224
 HEIGHT = 224
 FPS = 30
