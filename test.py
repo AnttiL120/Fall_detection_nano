@@ -54,7 +54,6 @@ def execute(image):
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
     draw_objects(image, counts, objects, peaks)
-    #processed = bgr8_to_jpeg(image[:, ::-1, :])
 
 def gstreamer_pipeline(
     sensor_id=0,

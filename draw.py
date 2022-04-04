@@ -8,9 +8,9 @@ class DrawObjects(object):
         self.nose_value = 0
         self.left_ankle_value = 14
         self.right_ankle_value = 15
-        self.peak_nose = ([1], [1])
-        self.peak_right_ankle = ([1], [1])
-        self.peak_left_ankle = ([1], [1])
+        self.peak_nose = 0
+        self.peak_right_ankle = 224
+        self.peak_left_ankle = 224
 
         
     def __call__(self, image, object_counts, objects, normalized_peaks):
@@ -26,14 +26,16 @@ class DrawObjects(object):
         peak_nose = self.peak_nose
         peak_right_ankle = self.peak_right_ankle
         peak_left_ankle = self.peak_left_ankle
-        fall_limit = 150
+        fall_limit = 100
+        nose_check = fall_limit + peak_nose
         
-        if (peak_nose[0] - fall_limit) < peak_right_ankle or peak_left_ankle:
-            standing = 'Human is standing'
+        if nose_check > peak_right_ankle or nose_check > peak_left_ankle:
+            #standing = 'Human has fallen'
             color = (0, 0, 255)
         else:
-            standing = 'Human might has fallen'
+            #standing = 'Human is standing'
             color = (0, 255, 0)
+
 
         for i in range(count):
             obj = objects[0][i]
@@ -46,11 +48,15 @@ class DrawObjects(object):
                     y = round(float(peak[0]) * height)
                     cv2.circle(image, (x, y), 3, color, 2)
                     if j == nose_value:
-                        peak_nose = ([x], [y])
+                        peak_nose = y
                     elif j == left_ankle_value:
-                        peak_left_ankle = ([x], [y])
+                        peak_left_ankle = y
                     elif j == right_ankle_value:
-                        peak_right_ankle = ([x], [y])
+                        peak_right_ankle = y
+                    cv2.putText(image, ('nose:{}'.format(peak_nose)),(10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, ('L.ankle:{}'.format(peak_left_ankle)),(120, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, ('R.ankle:{}'.format(peak_right_ankle)),(10, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    
 
             for k in range(K):
                 c_a = topology[k][2]
