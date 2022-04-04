@@ -7,9 +7,13 @@ class DrawObjects(object):
     def __init__(self, topology):
         self.topology = topology
         self.nose_value = 0
+        self.left_hip_value = 12
+        self.right_hip_value = 13
         self.left_ankle_value = 15
         self.right_ankle_value = 16
-        self.peak_nose_x = 0
+        self.peak_nose_x = 10
+        self.peak_left_ankle_x = 120
+        self.peak_right_hip_x = 120
         self.peak_right_ankle_x = 224
         self.peak_left_ankle_x = 224
 
@@ -24,11 +28,17 @@ class DrawObjects(object):
         nose_value = self.nose_value
         left_ankle_value = self.left_ankle_value
         right_ankle_value = self.right_ankle_value
+        left_hip_value = self.left_hip_value
+        right_hip_value = self.right_hip_value
         peak_nose_x = self.peak_nose_x
         peak_right_ankle_x = self.peak_right_ankle_x
         peak_left_ankle_x = self.peak_left_ankle_x
-        fall_limit = 150
-        nose_check = fall_limit + peak_nose_x
+        peak_left_hip_x = self.peak_left_ankle_x
+        peak_right_hip_x = self.peak_right_ankle_x
+        fall_limit_ankle = 170
+        fall_limit_hip = 100
+        ankle_check = fall_limit_ankle + peak_nose_x
+        hip_check = fall_limit_hip + peak_nose_x
 
         for i in range(count):
             obj = objects[0][i]
@@ -46,15 +56,26 @@ class DrawObjects(object):
                         peak_left_ankle_x = y
                     elif j == right_ankle_value:
                         peak_right_ankle_x = y
-                    if nose_check > peak_right_ankle_x or nose_check > peak_left_ankle_x:
+                    elif j == left_hip_value:
+                        peak_left_ankle_x = y
+                    elif j == right_hip_value:
+                        peak_right_ankle_x = y
+
+                    if ankle_check > peak_right_ankle_x or ankle_check > peak_left_ankle_x or hip_check > peak_left_hip_x or hip_check > peak_right_hip_x:
                         standing = 'Human has fallen'
                         color = (0, 0, 255)
                     else:
                         standing = 'Human is standing'
                         color = (0, 255, 0)
 
+
                     cv2.circle(image, (x, y), 3, color, 2)
                     cv2.putText(image, standing,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "nose:{}".format(peak_nose_x),(100, peak_nose_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "l.ankle:{}".format(peak_left_ankle_x),(180, peak_left_ankle_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "r.ankle:{}".format(peak_right_ankle_x),(0, peak_right_ankle_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "r.hip:{}".format(peak_right_hip_x),(180, peak_right_hip_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
+                    cv2.putText(image, "l.hip:{}".format(peak_left_hip_x),(0, peak_left_hip_x), cv2.FONT_HERSHEY_SIMPLEX, 0.1, color, 1, cv2.LINE_AA)
 
             #For loop for the lines
             for k in range(K):
