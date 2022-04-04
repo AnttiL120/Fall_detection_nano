@@ -1,3 +1,6 @@
+#Author: Antti Lehtosalo
+#Date 4.4.2022
+#Main functions are mostly copied from TRT_pose/live_demo.ipynb
 #First run init.py
 #Init saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
 
@@ -23,7 +26,7 @@ HEIGHT = 224
 FPS = 30
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
-#Loading optimizied model
+#Load optimizied model
 OPTIMIZED_MODEL = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(OPTIMIZED_MODEL))
