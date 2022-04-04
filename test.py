@@ -1,4 +1,4 @@
-#First run init.py with a command python3 init.py
+#First run init.py
 #Init saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
 
 import json
@@ -15,7 +15,6 @@ from trt_pose.parse_objects import ParseObjects
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
 
-keypoints = trt_pose.coco.coco_category_to_parts(human_pose)
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
 #Resolution on the model was 224x224 so using the same
@@ -36,7 +35,7 @@ device = torch.device('cuda')
 
 #parse and draw functions
 parse_objects = ParseObjects(topology)
-draw_objects = DrawObjects(topology, keypoints)
+draw_objects = DrawObjects(topology)
 
 #Images precrocess function
 def preprocess(image):
