@@ -38,7 +38,7 @@ https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit
 Pytorch and torchvision:  
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-10-now-available/72048 
 
-torch2trt nees packaging before installation:
+torch2trt needs packaging before installation:
 pip3 install packaging
 
 torch2trt and trt_pose:  
@@ -58,7 +58,7 @@ https://github.com/AnttiL120/Fall_detection_nano
 This project is made so the user has monitor, keyboard and mouse plugged in the jetson nano.  
 
 To check that modules are working run test/check.py  
-If this gives errors please check the installation packages
+If this gives errors, please check the installation packages
 
 First run init.py which saves an optimized version of the resnet18 baseline.  
 
