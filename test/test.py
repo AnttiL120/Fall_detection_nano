@@ -5,8 +5,8 @@ class pos(object):
     
     def __init__(self, topology):
         self.topology = topology
-        self.peaks = np.array([[],[]])
-        self.lines = np.array([[],[],[],[]])
+        self.peaks = np.empty((2,15,20))
+        self.lines = np.empty((4,15,20))
 
     def save(self, image, object_counts, objects, normalized_peaks):
         topology = self.topology
@@ -47,5 +47,3 @@ class pos(object):
 
     def load():
         return
-    
-    def empty_arrays():
