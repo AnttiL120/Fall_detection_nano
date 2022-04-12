@@ -1,7 +1,5 @@
 import jetson.inference
 import jetson.utils
-import argparse
-import sys
 import json
 import trt_pose.coco
 import torch
@@ -12,22 +10,6 @@ import PIL.Image
 from draw import DrawObjects
 from trt_pose.parse_objects import ParseObjects
 
-# parse the command line
-parser = argparse.ArgumentParser(description="Locate objects in a live camera stream using an object detection DNN.", 
-                                 formatter_class=argparse.RawTextHelpFormatter)
-
-parser.add_argument("input_URI", type=str, default="", nargs='?', help="URI of the input stream")
-parser.add_argument("output_URI", type=str, default="", nargs='?', help="URI of the output stream")
-
-is_headless = ["--headless"] if sys.argv[0].find('console.py') != -1 else [""]
-
-try:
-	opt = parser.parse_known_args()[0]
-except:
-	print("")
-	parser.print_help()
-	sys.exit(0)
-
 #Topology for human pose
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
@@ -35,8 +17,8 @@ with open('human_pose.json', 'r') as f:
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
 #Resolution on the model was 224x224 so using the same resolution
-WIDTH = 224
-HEIGHT = 224
+WIDTH = 1280
+HEIGHT = 720
 FPS = 30
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
@@ -73,21 +55,14 @@ def execute(image):
     draw_objects(image, counts, objects, peaks)
 
 
-# create video output object 
-output = jetson.utils.videoOutput(opt.output_URI, argv=sys.argv+is_headless)
-# create video sources
-input = jetson.utils.videoSource(opt.input_URI, argv=sys.argv)
+camera = jetson.utils.videoSource("csi://0", argv=['--input-width=1280', '--input-height=720', '--input-flip=FLIP'])
+display = jetson.utils.videoOutput("rtp://192.168.1.44:1234",argv=["--bitrate=10000000", "--headless"])
 
-# process frames until the user exits
 while True:
-	# capture the next image
-	img = input.Capture()
+    img = camera.Capture()
 
-	execute(img)
-	
-	# render the image
-	output.Render(img)
+    img = preprocess(img)
 
-	# exit on input/output EOS
-	if not input.IsStreaming() or not output.IsStreaming():
-		break
+    display.Render(img)
+    if not camera.IsStreaming() or not display.IsStreaming():
+        break
