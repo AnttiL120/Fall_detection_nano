@@ -1,3 +1,4 @@
+from inspect import FrameInfo
 import jetson.inference
 import jetson.utils
 import json
@@ -54,15 +55,60 @@ def execute(image):
     counts, objects, peaks = parse_objects(cmap, paf)
     draw_objects(image, counts, objects, peaks)
 
+def gstreamer_pipeline(
+    sensor_id=0,
+    capture_width=WIDTH,
+    capture_height=HEIGHT,
+    display_width=WIDTH,
+    display_height=HEIGHT,
+    framerate=FPS,
+    flip_method=0,
+):
+    return (
+        "nvarguscamerasrc sensor-id=%d !"
+        "video/x-raw(memory:NVMM), width=(int)%d, height=(int)%d, framerate=(fraction)%d/1 ! "
+        "nvvidconv flip-method=%d ! "
+        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
+        "videoconvert ! "
+        "video/x-raw, format=(string)BGR ! appsink"
+        % (
+            sensor_id,
+            capture_width,
+            capture_height,
+            framerate,
+            flip_method,
+            display_width,
+            display_height,
+        )
+    )
 
-camera = jetson.utils.videoSource("csi://0", argv=['--input-width=1280', '--input-height=720', '--input-flip=FLIP'])
+#Function for showing camera video to user
+def show_camera():
+    window_title = "Human Pose"
+
+    print(gstreamer_pipeline(flip_method=0))
+    video_capture = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+
+    if video_capture.isOpened():
+        try:
+            window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
+            while True:
+                ret_val, frame = video_capture.read()
+                # Check to see if the user closed the window
+                if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
+                    execute(frame)
+                    display.Render(frame)
+                else:
+                    break 
+        finally:
+            video_capture.release()
+            cv2.destroyAllWindows()
+    else:
+        print("Error: Unable to open camera")
+
+
+
 display = jetson.utils.videoOutput("rtp://192.168.1.44:1234",argv=["--bitrate=10000000", "--headless"])
 
 while True:
-    img = camera.Capture()
-
-    img = preprocess(img)
-
-    display.Render(img)
-    if not camera.IsStreaming() or not display.IsStreaming():
-        break
+    show_camera()
