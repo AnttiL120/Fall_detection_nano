@@ -11,7 +11,7 @@ from torch2trt import TRTModule
 import cv2
 import torchvision.transforms as transforms
 import PIL.Image
-from draw import DrawObjects
+from trt_pose.draw_objects import DrawObjects
 from trt_pose.parse_objects import ParseObjects
 
 #Topology for human pose

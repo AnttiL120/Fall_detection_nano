@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 
 class pos(object):
@@ -43,8 +42,8 @@ class pos(object):
                     y1 = round(float(peak1[0]) * height)
                     lines = np.insert(lines[0], (x0), axis=0)
                     lines = np.insert(lines[1], (y0), axis=0)
-                    lines = np.append(lines[2], (x1), axis=0)
-                    lines = np.append(lines[3], (y1), axis=0)
+                    lines = np.insert(lines[2], (x1), axis=0)
+                    lines = np.insert(lines[3], (y1), axis=0)
 
     def calc_data():
         return
