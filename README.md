@@ -39,17 +39,21 @@ Pytorch and torchvision:
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-10-now-available/72048 
 
 torch2trt needs packaging before installation:
-pip3 install packaging
+'''
+pip3 install packaging  
+'''
 
 torch2trt and trt_pose:  
 https://github.com/NVIDIA-AI-IOT/trt_pose  
 
-resnet18_baseline_att_224x224_A is needed in the root file of the project.  
+resnet18_baseline_att_224x224_A model is needed in the root file of the project.  
 This can be downloaded from: https://github.com/NVIDIA-AI-IOT/trt_pose  
 The functionality can be checked with trt_pose/live_demo in jupytern notebook.  
 
-Make sure gstreamer has been installed to the jetpack:  
+Make sure gstreamer has been installed on the jetpack:  
+'''
 gst-inspect-1.0 --version  
+'''
 
 Then you can download this project from the source:  
 https://github.com/AnttiL120/Fall_detection_nano  
@@ -57,12 +61,20 @@ https://github.com/AnttiL120/Fall_detection_nano
 ### Usage
 This project is made so the user has monitor, keyboard and mouse plugged in the jetson nano.  
 
-To check that modules are working run test/check.py  
-If this gives errors, please check the installation packages
+To check that modules are installed correctly run test/check.py  
+'''
+python3 check.py
+'''
 
 First run init.py which saves an optimized version of the resnet18 baseline.  
+'''
+python3 init.py
+'''
 
 Then if you get no errors run the main.py with python3.
+'''
+python3 main.py
+'''
 This might take while because loading of the model takes a while.
 
 ### Maintainer(s)
@@ -70,13 +82,13 @@ Antti Lehtosalo @AnttiL120
 
 ### Credits
 
-Credits to the makers of TRT_pose.
+Credits to the makers of TRT_pose.  
 jaybdub John  
-tokk-nv Chitoku Yato
+tokk-nv Chitoku Yato  
 
 ### Thanks
-Thank you jaybdub John and tokk-nv Chitoku YATO for making trt_pose and great starting demo.
-
+Thank you jaybdub John and tokk-nv Chitoku YATO for making trt_pose and great starting demo.  
+Thank you also to Nvidia and Dusty-nv for the great tutorials founded online.  
 ### Contributing
 Antti Lehtosalo @AnttiL120
 

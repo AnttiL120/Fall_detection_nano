@@ -5,7 +5,6 @@ import settings
 
 # load the pose estimation model
 net = jetson.inference.poseNet("resnet18_baseline_att_224x2245_A_epoch_249_trt.pth", sys.argv, 0.5)
-
 # create video sources & outputs
 input = jetson.utils.videoSource(settings.camera, settings.camera_argv)
 output = jetson.utils.videoOutput(settings.output, settings.output_argv)

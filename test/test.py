@@ -4,8 +4,8 @@ class pos(object):
     
     def __init__(self, topology):
         self.topology = topology
-        self.peaks = np.empty((2,18,20))
-        self.lines = np.empty((4,18,20))
+        self.peaks = np.zeros((2,18,1))
+        self.lines = np.zeros((4,18,1))
         self.height = 224
         self.width = 224
 
