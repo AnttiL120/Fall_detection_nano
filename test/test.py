@@ -21,15 +21,25 @@ class pos(object):
         for i in range(count):
             obj = objects[0][i]
             C = obj.shape[0]
+
+            a = np.zeros((2, C, 1), dtype=float)
             for j in range(C):
                 k = int(obj[j])
                 if k >= 0:
                     peak = normalized_peaks[0][j][k]
                     x = round(float(peak[1]) * width)
                     y = round(float(peak[0]) * height)
-                    peaks = np.insert(peaks[0], (x), axis=0)
-                    peaks = np.insert(peaks[1], (y), axis=0)
+                    np.put(a, [j], [x])
+                    np.put(a, [j + count], [y])
+                else:
+                    np.put(a, [j], [0])
+                    np.put(a, [j + count], [0])
 
+            peaks = np.append(peaks, a, axis=2)
+
+
+                    
+            b = np.zeros((count, K, 1))
             for k in range(K):
                 c_a = topology[k][2]
                 c_b = topology[k][3]
@@ -40,10 +50,10 @@ class pos(object):
                     y0 = round(float(peak0[0]) * height)
                     x1 = round(float(peak1[1]) * width)
                     y1 = round(float(peak1[0]) * height)
-                    lines = np.insert(lines[0], (x0), axis=0)
-                    lines = np.insert(lines[1], (y0), axis=0)
-                    lines = np.insert(lines[2], (x1), axis=0)
-                    lines = np.insert(lines[3], (y1), axis=0)
+                    np.put(b, [k], [x0])
+                    np.put(b, [k + K], [y0])
+            lines = np.append(lines, b, axis=2)
+
 
     def calc_data():
         return
