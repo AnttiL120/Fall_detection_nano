@@ -28,8 +28,8 @@ class DrawObjects(object):
         K = topology.shape[0]
         count = int(object_counts[0])
 
-        fall_limit_ankle = 180
-        fall_limit_hip = 120
+        fall_limit_ankle = 150
+        fall_limit_hip = 100
         ankle_check = fall_limit_ankle + self.peak_nose_y
         hip_check = fall_limit_hip + self.peak_nose_y
 
@@ -68,8 +68,8 @@ class DrawObjects(object):
 
                     cv2.circle(image, (x, y), 3, self.color, 2)
                     cv2.putText(image, self.standing,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.color, 1, cv2.LINE_AA)
-                    cv2.line(image, (0, ankle_check), (224, ankle_check), self.color, 1)
-                    cv2.line(image, (0, hip_check), (224, hip_check), self.color, 1)
+                    cv2.line(image, (0, ankle_check), (224, ankle_check), (0, 255, 0), 1)
+                    cv2.line(image, (0, hip_check), (224, hip_check), (0, 255, 0), 1)
                     cv2.line(image, (0, self.peak_left_ankle_y), (224, self.peak_left_ankle_y), self.color, 1)
                     cv2.line(image, (0, self.peak_right_ankle_y), (224, self.peak_right_ankle_y), self.color, 1)
                     cv2.line(image, (0, self.peak_left_hip_y), (224, self.peak_left_hip_y), self.color, 1)
