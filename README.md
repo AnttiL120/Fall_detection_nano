@@ -57,12 +57,16 @@ gst-inspect-1.0 --version
 
 Then you can download this project from the source:  
 https://github.com/AnttiL120/Fall_detection_nano  
+``` 
+git clone https://github.com/AnttiL120/Fall_detection_nano.git
+``` 
 
 ### Usage
 This project is made so the user has monitor, keyboard and mouse plugged in the jetson nano.  
 
 To check that modules are installed correctly run   
 ``` 
+cd Fall_detection_nano  
 python3 test/check.py
 ``` 
 
