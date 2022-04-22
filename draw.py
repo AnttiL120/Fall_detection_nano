@@ -28,10 +28,23 @@ class DrawObjects(object):
         K = topology.shape[0]
         count = int(object_counts[0])
 
-        fall_limit_ankle = 150
-        fall_limit_hip = 100
+        fall_limit_ankle = 130
+        fall_limit_hip = 50
         ankle_check = fall_limit_ankle + self.peak_nose_y
         hip_check = fall_limit_hip + self.peak_nose_y
+
+        if self.check_stand > 15:
+            
+            if ankle_check > self.peak_right_ankle_y or ankle_check > self.peak_left_ankle_y or hip_check > self.peak_left_hip_y or hip_check > self.peak_right_hip_y:
+                self.standing = 'Human has fallen'
+                self.color = (0, 0, 255)
+
+            else:
+                self.standing = 'Human is standing'
+                self.color = (0, 255, 0)
+
+            self.check_stand = 0
+        self.check_stand += 1
 
         for i in range(count):
             obj = objects[0][i]
@@ -54,32 +67,14 @@ class DrawObjects(object):
                     elif j == self.right_hip_value:
                         self.peak_right_ankle_y = y
 
-                    if self.check_stand > 100 or self.check_stand == 0:
-
-                        if ankle_check > self.peak_right_ankle_y or ankle_check > self.peak_left_ankle_y or hip_check > self.peak_left_hip_y or hip_check > self.peak_right_hip_y:
-                            self.standing = 'Human has fallen'
-                            self.color = (0, 0, 255)
-                        else:
-                            self.standing = 'Human is standing'
-                            self.color = (0, 255, 0)
-                        self.check_stand = 0
-
-                    self.check_stand += 1
-
                     cv2.circle(image, (x, y), 3, self.color, 2)
                     cv2.putText(image, self.standing,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.color, 1, cv2.LINE_AA)
-                    cv2.line(image, (0, ankle_check), (224, ankle_check), (0, 255, 0), 1)
-                    cv2.line(image, (0, hip_check), (224, hip_check), (0, 255, 0), 1)
-                    cv2.line(image, (0, self.peak_left_ankle_y), (224, self.peak_left_ankle_y), self.color, 1)
-                    cv2.line(image, (0, self.peak_right_ankle_y), (224, self.peak_right_ankle_y), self.color, 1)
-                    cv2.line(image, (0, self.peak_left_hip_y), (224, self.peak_left_hip_y), self.color, 1)
-                    cv2.line(image, (0, self.peak_right_hip_y), (224, self.peak_right_hip_y), self.color, 1)
-                    #cv2.putText(image, "ankle_check:{}".format(ankle_check),(150, ankle_check), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.color, 1, cv2.LINE_AA)
-                    #cv2.putText(image, "hip_check:{}".format(hip_check),(50, hip_check), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.color, 1, cv2.LINE_AA)
-                    #cv2.putText(image, "l.ankle:{}".format(self.peak_left_ankle_y),(180, self.peak_left_ankle_y), cv2.FONT_HERSHEY_SIMPLEX, 0.1, self.color, 1, cv2.LINE_AA)
-                    #cv2.putText(image, "r.ankle:{}".format(self.peak_right_ankle_y),(0, self.peak_right_ankle_y), cv2.FONT_HERSHEY_SIMPLEX, 0.1, self.color, 1, cv2.LINE_AA)
-                    #cv2.putText(image, "r.hip:{}".format(self.peak_right_hip_y),(180, self.peak_right_hip_y), cv2.FONT_HERSHEY_SIMPLEX, 0.1, self.color, 1, cv2.LINE_AA)
-                    #cv2.putText(image, "l.hip:{}".format(self.peak_left_hip_y),(0, self.peak_left_hip_y), cv2.FONT_HERSHEY_SIMPLEX, 0.1, self.color, 1, cv2.LINE_AA)
+                    #cv2.line(image, (0, ankle_check), (224, ankle_check), (0, 255, 0), 1)
+                    #cv2.line(image, (0, hip_check), (224, hip_check), (0, 255, 0), 1)
+                    #cv2.line(image, (0, self.peak_left_ankle_y), (224, self.peak_left_ankle_y), (0, 0, 255), 1)
+                    #cv2.line(image, (0, self.peak_right_ankle_y), (224, self.peak_right_ankle_y), (0, 0, 255), 1)
+                    #cv2.line(image, (0, self.peak_left_hip_y), (224, self.peak_left_hip_y), (0, 0, 255), 1)
+                    #cv2.line(image, (0, self.peak_right_hip_y), (224, self.peak_right_hip_y), (0, 0, 255), 1)
 
             #For loop for the lines
             for k in range(K):
