@@ -38,10 +38,10 @@ https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit
 Pytorch and torchvision:  
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-10-now-available/72048 
 
-torch2trt needs packaging before installation:
-'''
+torch2trt needs packaging before installation:  
+´´´  
 pip3 install packaging  
-'''
+´´´  
 
 torch2trt and trt_pose:  
 https://github.com/NVIDIA-AI-IOT/trt_pose  
