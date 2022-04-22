@@ -58,6 +58,7 @@ def execute(image):
     counts, objects, peaks = parse_objects(cmap, paf)
     draw_objects(image, counts, objects, peaks)
 
+# Opens gstreamer_pipeline
 def gstreamer_pipeline(
     sensor_id=0,
     capture_width=WIDTH,
