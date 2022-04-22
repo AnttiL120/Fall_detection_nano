@@ -42,6 +42,11 @@ torch2trt needs packaging before installation:
 ´´´  
 pip3 install packaging  
 ´´´  
+```python
+s = "Python syntax highlighting"
+print s
+```
+
 
 torch2trt and trt_pose:  
 https://github.com/NVIDIA-AI-IOT/trt_pose  
