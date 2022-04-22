@@ -1,5 +1,5 @@
 #Author: Antti Lehtosalo
-#Date 4.4.2022
+#Date 22.4.2022
 #Main functions are mostly reused from TRT_pose/live_demo.ipynb
 #First run init.py
 #Init saves an optimized model "resnet18_baseline_att_224x224_A_epoch_249_trt.pth" to the project
