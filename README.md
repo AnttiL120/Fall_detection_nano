@@ -39,14 +39,9 @@ Pytorch and torchvision:
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-10-now-available/72048 
 
 torch2trt needs packaging before installation:  
-´´´  
+``` 
 pip3 install packaging  
-´´´  
-```python
-s = "Python syntax highlighting"
-print s
 ```
-
 
 torch2trt and trt_pose:  
 https://github.com/NVIDIA-AI-IOT/trt_pose  
@@ -56,9 +51,9 @@ This can be downloaded from: https://github.com/NVIDIA-AI-IOT/trt_pose
 The functionality can be checked with trt_pose/live_demo in jupytern notebook.  
 
 Make sure gstreamer has been installed on the jetpack:  
-'''
+``` 
 gst-inspect-1.0 --version  
-'''
+``` 
 
 Then you can download this project from the source:  
 https://github.com/AnttiL120/Fall_detection_nano  
@@ -66,23 +61,25 @@ https://github.com/AnttiL120/Fall_detection_nano
 ### Usage
 This project is made so the user has monitor, keyboard and mouse plugged in the jetson nano.  
 
-To check that modules are installed correctly run test/check.py  
-'''
-python3 check.py
-'''
+To check that modules are installed correctly run   
+``` 
+python3 test/check.py
+``` 
 
 First run init.py which saves an optimized version of the resnet18 baseline.  
-'''
+``` 
 python3 init.py
-'''
+``` 
 
-Then if you get no errors run the main.py with python3.
-'''
+Then if you get no errors run the main file
+``` 
 python3 main.py
-'''
-This might take while because loading of the model takes a while.
+``` 
+
+This might take while because of loading the model takes time.
 
 ### Maintainer(s)
+
 Antti Lehtosalo @AnttiL120
 
 ### Credits
@@ -92,6 +89,7 @@ jaybdub John
 tokk-nv Chitoku Yato  
 
 ### Thanks
+
 Thank you jaybdub John and tokk-nv Chitoku YATO for making trt_pose and great starting demo.  
 Thank you also to Nvidia and Dusty-nv for the great tutorials founded online.  
 ### Contributing
