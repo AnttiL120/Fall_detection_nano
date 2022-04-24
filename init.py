@@ -5,6 +5,7 @@ import trt_pose.models
 import torch2trt
 import time
 
+#Load human pose from json file in your root file
 with open('human_pose.json', 'r') as f:
     human_pose = json.load(f)
 
@@ -15,20 +16,23 @@ num_links = len(human_pose['skeleton'])
 
 model = trt_pose.models.resnet18_baseline_att(num_parts, 2 * num_links).cuda().eval()
 
+#Basleine model. This has to be in your root project as a file
 MODEL_WEIGHTS = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
 
 model.load_state_dict(torch.load(MODEL_WEIGHTS))
 
+#Resolution used in otimizitation
 WIDTH = 224
 HEIGHT = 224
 
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
 
+#Saving optimized model
 OPTIMIZED_MODEL = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
-
 torch.save(model_trt.state_dict(), OPTIMIZED_MODEL)
 
+# Benchmark FPS
 t0 = time.time()
 torch.cuda.current_stream().synchronize()
 for i in range(50):
